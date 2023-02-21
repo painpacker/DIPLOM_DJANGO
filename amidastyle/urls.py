@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from amidastyle.views import (
     UserViewSet, health_check, AdvertisementViewSet, ProductViewSet, AdvertisementList,
+    ProductView,  ProductUpdate, UpdateUserSubscription
 
 )
 
@@ -14,5 +15,11 @@ router.register(r'products', ProductViewSet)
 urlpatterns = [
     path("", include(router.urls)),
     path("ping/", health_check),
-    re_path('^Advertisement/(?P<user_id>.+)/$', AdvertisementList.as_view()),
+    path("products/<int:pk>/", ProductUpdate.as_view()),
+    path("user/<int:account_id>", UpdateUserSubscription.as_view(), name='account-detail'),
+    path('user/<int:account_id>/subscription/', UpdateUserSubscription.as_view(), name='account-subscription'),
+    re_path('^Advertisement/(?P<account_id>.+)/$', AdvertisementList.as_view()),
+    re_path('^Products/(?P<account_id>.+)/$', ProductView.as_view()),
+
+
 ]

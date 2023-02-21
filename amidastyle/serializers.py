@@ -1,43 +1,37 @@
 from django.contrib.auth.models import User
 
 from amidastyle import models
-from amidastyle.models import CustomUser, Balance, Advertisement, product, subscription
+from amidastyle.models import CustomUser,  Advertisement, product
 from rest_framework import serializers
 
 
-class BalanceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Balance
-        fields = ["balance"]
-
-
-class SubscriptionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = subscription
-        fields = ["subscription_chooses", "subscription"]
 
 
 class AdvertisementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advertisement
-        fields = ["id", "name", "title", "price", "url", "user_id"]
+        fields = ["id", "name", "title", "price", "url", "account_id", "username"]
+
 
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = product
-        fields = ["id", "name", "title", "price", "user_id"]
+        fields = ["id", "name", "title", "price", "account_id", "username", "contacts"]
 
 
 
 class UserSerializer(serializers.ModelSerializer):
-    advertisement = AdvertisementSerializer(read_only=True)
-    product = ProductSerializer(read_only=True)
-
-
     class Meta:
         model = CustomUser
-        fields = ["id", "name", "user_id", "phone",  "email", "advertisement", "product"]
+        fields = ["id", "username", "account_id", "subscription"]
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('subscription',)
+
+
 
     def create(self, validated_data):
         return CustomUser.objects.create(**validated_data)
